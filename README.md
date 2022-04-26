@@ -43,3 +43,8 @@ export publicIP=$(az vm show \
 
 ssh $publicIP
 ```
+
+#### Access Azure Instance Metadata Service
+* [Access Azure Instance Metadata Service](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/instance-metadata-service?tabs=linux#access-azure-instance-metadata-service)
+
+    `curl -s -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2021-02-01" | jq`
