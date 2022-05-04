@@ -14,6 +14,8 @@ az account list \
    --output table
 
 az configure --defaults group=RG_NAME
+
+subId=$(az account show --subscription "" | jq -r '.id')
 ```
 
 
