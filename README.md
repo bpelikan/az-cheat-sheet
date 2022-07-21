@@ -15,6 +15,9 @@ az account list \
 
 az configure --defaults group=RG_NAME
 
+az config get
+az config unset defaults.group
+
 subId=$(az account show --subscription "" | jq -r '.id')
 ```
 
