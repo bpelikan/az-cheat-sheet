@@ -14,6 +14,8 @@ az account list \
    --output table
 
 az configure --defaults group=RG_NAME
+az configure --defaults group=''
+
 
 az config get
 az config unset defaults.group
