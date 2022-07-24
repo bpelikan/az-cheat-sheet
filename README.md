@@ -51,6 +51,40 @@ export publicIP=$(az vm show \
 ssh $publicIP
 ```
 
+#### Service principal
+```bash
+SUB_ID="748173f1-20c4-4e68-ac58-641f67a83501"
+az account set --subscription $SUB_ID
+
+# Create Service principal
+az ad sp create-for-rbac -n "testReaderApp" --role reader --scopes /subscriptions/$SUB_ID 
+# Zapisujemy otrzymane dane w bezpiecznym miejscu
+
+APP_ID="53a10bbf-b0d1-4c36-b1dc-31397e194cdc"
+az ad sp show --id $APP_ID
+az role assignment list --assignee $APP_ID --include-inherited --include-groups
+# az ad sp delete --id $APP_ID
+
+# sp list in tenant
+# az ad sp list --all --query "[?appOwnerTenantId == '<TENANT_ID>']"
+
+
+az role assignment create \
+  --assignee $APP_ID \
+  --role Contributor \
+  --scope RESOURCE_GROUP_ID \
+  --description "Contributor role within the resource group."
+
+az login --service-principal \
+  --username $APP_ID \
+  --password SERVICE_PRINCIPAL_KEY \
+  --tenant TENANT_ID \
+  --allow-no-subscriptions
+  
+az logout
+```
+
+
 #### Access Azure Instance Metadata Service
 * [Access Azure Instance Metadata Service](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/instance-metadata-service?tabs=linux#access-azure-instance-metadata-service)
 
