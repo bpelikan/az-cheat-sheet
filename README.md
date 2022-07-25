@@ -63,7 +63,8 @@ az ad sp create-for-rbac -n "testReaderApp" --role reader --scopes /subscription
 
 APP_ID="53a10bbf-b0d1-4c36-b1dc-31397e194cdc"
 az ad sp show --id $APP_ID
-az role assignment list --assignee $APP_ID --include-inherited --include-groups
+az role assignment list --assignee $APP_ID --all
+# az role assignment list --assignee $APP_ID --include-inherited --include-groups
 # az ad sp delete --id $APP_ID
 
 # sp list in tenant
