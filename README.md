@@ -7,6 +7,7 @@ az login
 
 az account list --output table
 az account set --subscription "SUB_ID"
+# az account set --subscription "sandbox"
 
 az account list \
    --refresh \
