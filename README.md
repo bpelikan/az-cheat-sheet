@@ -58,7 +58,7 @@ SUB_ID="748173f1-20c4-4e68-ac58-641f67a83501"
 az account set --subscription $SUB_ID
 
 # Create Service principal
-az ad sp create-for-rbac -n "testReaderApp" --role reader --scopes /subscriptions/$SUB_ID 
+az ad sp create-for-rbac -n "testReaderApp" --role reader --scopes "/subscriptions/$SUB_ID"
 # Zapisujemy otrzymane dane w bezpiecznym miejscu
 
 APP_ID="53a10bbf-b0d1-4c36-b1dc-31397e194cdc"
