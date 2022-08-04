@@ -86,6 +86,40 @@ az login --service-principal \
 az logout
 ```
 
+### App Registration and Service Principal for Workload identity 
+```bash
+githubOrganizationName='bpelikan'
+githubRepositoryName='mslearn-test-bicep-code-using-github-actions'
+
+# Create a workload identity
+applicationRegistrationDetails=$(az ad app create --display-name 'mslearn-toy-website-test')
+applicationRegistrationObjectId=$(echo $applicationRegistrationDetails | jq -r '.id')
+applicationRegistrationAppId=$(echo $applicationRegistrationDetails | jq -r '.appId')
+
+az ad app federated-credential create \
+   --id $applicationRegistrationObjectId \
+   --parameters "{\"name\":\"toy-website-test\",\"issuer\":\"https://token.actions.githubusercontent.com\",\"subject\":\"repo:${githubOrganizationName}/${githubRepositoryName}:environment:Website\",\"audiences\":[\"api://AzureADTokenExchange\"]}"
+
+az ad app federated-credential create \
+   --id $applicationRegistrationObjectId \
+   --parameters "{\"name\":\"toy-website-test-branch\",\"issuer\":\"https://token.actions.githubusercontent.com\",\"subject\":\"repo:${githubOrganizationName}/${githubRepositoryName}:ref:refs/heads/main\",\"audiences\":[\"api://AzureADTokenExchange\"]}"
+
+
+# Create a resource group in Azure and grant the workload identity access
+resourceGroupResourceId=$(az group create --name ToyWebsiteTest --location westus --query id --output tsv)
+
+az ad sp create --id $applicationRegistrationObjectId
+az role assignment create \
+   --assignee $applicationRegistrationAppId \
+   --role Contributor \
+   --scope $resourceGroupResourceId
+
+# Prepare GitHub secrets
+echo "AZURE_CLIENT_ID: $applicationRegistrationAppId"
+echo "AZURE_TENANT_ID: $(az account show --query tenantId --output tsv)"
+echo "AZURE_SUBSCRIPTION_ID: $(az account show --query id --output tsv)"
+```
+
 
 #### Access Azure Instance Metadata Service
 * [Access Azure Instance Metadata Service](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/instance-metadata-service?tabs=linux#access-azure-instance-metadata-service)
