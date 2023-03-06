@@ -125,3 +125,37 @@ echo "AZURE_SUBSCRIPTION_ID: $(az account show --query id --output tsv)"
 * [Access Azure Instance Metadata Service](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/instance-metadata-service?tabs=linux#access-azure-instance-metadata-service)
 
     `curl -s -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance?api-version=2021-02-01" | jq`
+
+
+#### Get Access control (IAM) list
+* [directoryObject: getByIds](https://docs.microsoft.com/en-us/graph/api/directoryobject-getbyids?view=graph-rest-1.0&tabs=http)
+* [Authentication and authorization basics](https://docs.microsoft.com/en-us/graph/auth/auth-concepts)
+
+
+```bash
+az role assignment list --all 
+az ad user show --id eff6dad5-9d3f-4e32-85b3-49729e48d66e
+az ad user show --id 106be6a6-0240-45d9-aa44-ee8e1e43b53a
+
+AZURE_SUBSCRIPTION_ID="748173f1-20c4-4e68-ac58-641f67a83501"
+az rest -m get -u https://management.azure.com/subscriptions/$AZURE_SUBSCRIPTION_ID/providers/Microsoft.Authorization/roleAssignments?api-version=2015-07-01 
+```
+
+```json
+{
+   "ids":[
+      "eff6dad5-9d3f-4e32-85b3-49729e48d66e",
+      "106be6a6-0240-45d9-aa44-ee8e1e43b53a",
+   ],
+   "types":[
+      "user",
+      "group",
+      "device"
+   ]
+}
+```
+
+```bash
+az rest -m post -u 'https://graph.microsoft.com/v1.0/directoryObjects/getByIds' --body @body.json > response.json
+
+```
