@@ -32,13 +32,27 @@ az aks nodepool add \
 ## Connect `kubectl` to AKS
 ```bash
 az aks get-credentials --name $CLUSTER_NAME --resource-group $RESOURCE_GROUP
-# kubectl get nodes
-# kubectl apply -f ./example-deployment.yaml
+kubectl get nodes
+```
+
+## Deployment
+```bash
+kubectl apply -f ./deployment.yaml
+# kubectl get deployment
+kubectl apply -f ./service.yaml
+# kubectl get service
+
+ZoneName=$(az aks show -g $RESOURCE_GROUP -n $CLUSTER_NAME -o tsv --query addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName)
+sed -i "s|<zone-name>|${ZoneName}|g" ./ingress.yaml
+
+kubectl apply -f ./ingress.yaml
+# kubectl get ingress
 ```
 
 
 
-## Delete RG
+## Delete
 ```bash
 az group delete --name=$RESOURCE_GROUP --no-wait
+kubectl config delete-context $CLUSTER_NAME
 ```

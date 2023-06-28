@@ -24,6 +24,6 @@ spec:
               memory: 256Mi
           ports:
             - containerPort: 80 # This container exposes port 80
-              name: http # We named that port "http" so we can refer to it later
+              name: http-port-name # We named that port "http" so we can refer to it later
 
         
