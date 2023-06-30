@@ -1,13 +1,10 @@
-# Azure Kubernetes Service
-
-
 ## Create AKS from CLI
 ```bash
-export RESOURCE_GROUP=aks-demo
-export CLUSTER_NAME=aks-demo-cluster
-export LOCATION=westeurope
-export SYSTEM_NODE_COUNT=1
-export USER_NODE_COUNT=1
+RESOURCE_GROUP=aks-demo1
+CLUSTER_NAME=aks-demo1-$(date '+%Y%m%d')
+LOCATION=westeurope
+SYSTEM_NODE_COUNT=1
+USER_NODE_COUNT=1
 
 az group create --name=$RESOURCE_GROUP --location=$LOCATION
 
@@ -53,6 +50,6 @@ kubectl apply -f ./ingress.yaml
 
 ## Delete
 ```bash
-az group delete --name=$RESOURCE_GROUP --no-wait
+az group delete --name=$RESOURCE_GROUP --yes --no-wait
 kubectl config delete-context $CLUSTER_NAME
 ```
