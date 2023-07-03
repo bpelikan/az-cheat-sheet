@@ -9,8 +9,6 @@ CLUSTER_NAME=aks-demo2-$(date '+%Y%m%d')
 SYSTEM_NODE_COUNT=1
 USER_NODE_COUNT=1
 
-
-
 az group create --name=$RESOURCE_GROUP --location=$LOCATION
 
 VERSION=$(az aks get-versions --location $LOCATION --query 'orchestrators[?!isPreview] | [-1].orchestratorVersion' --output tsv)
@@ -38,7 +36,8 @@ az aks nodepool add \
     --cluster-name $CLUSTER_NAME \
     --name userpoolname \
     --node-count $USER_NODE_COUNT \
-    --node-vm-size Standard_B2s
+    --node-vm-size Standard_B2s \
+    --no-wait
 
 az aks nodepool list --resource-group $RESOURCE_GROUP --cluster-name $CLUSTER_NAME
 ```
@@ -49,7 +48,8 @@ az aks nodepool scale \
     --resource-group $RESOURCE_GROUP \
     --cluster-name $CLUSTER_NAME \
     --name userpoolname \
-    --node-count 0
+    --node-count 0 \
+    --no-wait
 ```
 
 ## Create a spot node pool

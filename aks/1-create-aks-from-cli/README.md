@@ -22,7 +22,10 @@ az aks nodepool add \
     --cluster-name $CLUSTER_NAME \
     --name userpool \
     --node-count $USER_NODE_COUNT \
-    --node-vm-size Standard_B2s
+    --node-vm-size Standard_B2s \
+    --no-wait
+    
+az aks nodepool list --resource-group $RESOURCE_GROUP --cluster-name $CLUSTER_NAME
 ```
 
 
