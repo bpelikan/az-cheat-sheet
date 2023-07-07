@@ -59,7 +59,7 @@ az aks nodepool add \
     --cluster-name $CLUSTER_NAME \
     --name userspotpool \
     --enable-cluster-autoscaler \
-    --max-count 3 \
+    --max-count 4 \
     --min-count 1 \
     --priority Spot \
     --eviction-policy Delete \
@@ -145,7 +145,7 @@ Spot nodes are configured with a node taint set to kubernetes.azure.com/scaleset
 az aks get-credentials --name $CLUSTER_NAME --resource-group $RESOURCE_GROUP
 kubectl get nodes
 
-
+wget https://raw.githubusercontent.com/bpelikan/az-cheat-sheet/main/aks/2-spot-node-pools/spot-node-deployment.yaml
 kubectl create namespace costsavings
 kubectl apply --namespace costsavings -f spot-node-deployment.yaml
 kubectl get pods --namespace costsavings -o wide
