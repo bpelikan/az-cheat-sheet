@@ -33,6 +33,8 @@ az group create --name $RG_NAME --location $LOCATION
 
 export VMNAME=vm01
 # export -p
+#PASSWORD=$(tr -dc A-Za-z0-9 </dev/urandom 2>/dev/null | head -c 15)
+
 export publicIP=$(az vm create \
     --name $VMNAME \
     --resource-group $RG_NAME \
@@ -50,6 +52,8 @@ export publicIP=$(az vm show \
     --output tsv)
 
 ssh $publicIP
+
+#ssh -n -o BatchMode=yes -o StrictHostKeyChecking=no $publicIP "curl -s http://URL:8080/api/healthcheck"
 ```
 
 #### Service principal
