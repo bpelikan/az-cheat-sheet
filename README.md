@@ -163,3 +163,7 @@ az rest -m get -u https://management.azure.com/subscriptions/$AZURE_SUBSCRIPTION
 az rest -m post -u 'https://graph.microsoft.com/v1.0/directoryObjects/getByIds' --body @body.json > response.json
 
 ```
+
+```bash
+ az group list --query "[?starts_with(name,'rg-testname')].[name]" --output tsv | xargs -L1 bash -c 'az group delete --name $0 --no-wait --yes'
+```
