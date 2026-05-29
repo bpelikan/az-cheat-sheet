@@ -1,0 +1,46 @@
+@client_id=
+@tenant_id=4f0f3c22-2cbb-44c7-a530-ec9f729bd18e
+@subscription_id=748173f1-20c4-4e68-ac58-641f67a83501
+@client_secret=
+@resource=https://management.core.windows.net/
+
+
+###
+# @name get_access_token
+POST https://login.microsoftonline.com/{{tenant_id}}/oauth2/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials&client_id={{client_id}}&client_secret={{client_secret}}&resource={{resource}}
+
+
+### get access token from response body
+@access_token = {{get_access_token.response.body.access_token}}
+
+###
+# @name test_access_token
+GET https://management.azure.com/subscriptions?api-version=2020-01-01
+Authorization: Bearer {{access_token}}
+
+
+### set up variables for pipeline run
+@resource_group=adf-api-test
+@factory_name=adfdemobp0529
+@pipeline_name=pipeline1
+
+###
+# @name run_pipeline
+POST https://management.azure.com/subscriptions/{{subscription_id}}/resourceGroups/{{resource_group}}/providers/Microsoft.DataFactory/factories/{{factory_name}}/pipelines/{{pipeline_name}}/createRun?api-version=2018-06-01
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{}
+
+
+
+###
+curl -X POST -d "grant_type=client_credentials&client_id={{client_id}}&client_secret={{client_secret}}&resource={{resource}}" https://login.microsoftonline.com/{{tenant_id}}/oauth2/token
+
+
+###
+curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer {{access_token}}" -d "{}" https://management.azure.com/subscriptions/{{subscription_id}}/resourceGroups/{{resource_group}}/providers/Microsoft.DataFactory/factories/{{factory_name}}/pipelines/{{pipeline_name}}/createRun?api-version=2018-06-01
+
